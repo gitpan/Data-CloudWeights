@@ -1,6 +1,6 @@
 package Data::CloudWeights;
 
-# @(#)$Id: CloudWeights.pm 29 2008-02-27 15:51:08Z pjf $
+# @(#)$Id: CloudWeights.pm 44 2008-02-28 11:08:43Z pjf $
 # Originally WWW::CloudCreator. Now returns even more raw result
 
 use strict;
@@ -8,7 +8,7 @@ use warnings;
 use base qw(Class::Accessor::Fast);
 use Readonly;
 
-use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev: 29 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev: 44 $ =~ /\d+/gmx );
 
 Readonly my %ATTRS =>
    ( # Input. Set in constructor or call mutator before formation method
@@ -194,7 +194,7 @@ Data::CloudWeights - Calculate values for an HTML tag cloud
 
 =head1 Version
 
-0.1.$Rev: 29 $
+0.1.$Rev: 44 $
 
 =head1 Synopsis
 
@@ -346,6 +346,8 @@ This did not let me calculate font sizes in ems
 =over 4
 
 =item L<Class::Accessor::Fast>
+
+=item L<Readonly>
 
 =back
 

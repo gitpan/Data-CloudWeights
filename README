@@ -2,7 +2,7 @@ Name
     Data::CloudWeights - Calculate values for an HTML tag cloud
 
 Version
-    0.1.$Rev: 29 $
+    0.1.$Rev: 44 $
 
 Synopsis
        use Data::CloudWeights;
@@ -124,6 +124,7 @@ Acknowledgements
 
 Dependencies
     Class::Accessor::Fast
+    Readonly
 
 Incompatibilities
     There are no known incompatibilities in this module.
