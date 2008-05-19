@@ -2,7 +2,7 @@ Name
     Data::CloudWeights - Calculate values for an HTML tag cloud
 
 Version
-    0.1.$Rev: 44 $
+    0.2.$Rev: 48 $
 
 Synopsis
        use Data::CloudWeights;
@@ -11,7 +11,7 @@ Synopsis
        my $cloud = Data::CloudWeights->new( \%cfg );
 
        # Add one or more tags to the cloud
-       $cloud->add( $name, $count, $value );
+       $cloud->add( $tag, $count, $value );
 
        # Calculate the tag cloud values
        my $nimbus = $cloud->formation();
@@ -55,6 +55,9 @@ Configuration and Environment
     The six character hex colour for the highest count in the cloud.
     Defaults to FF0000 (red)
 
+   limit
+    Limits the size of the returned list. Defaults to zero, no limit
+
    max_size
     The upper boundary value to which the highest count in the cloud is
     scaled. Defaults to 2.0 (ems)
@@ -62,6 +65,20 @@ Configuration and Environment
    min_size
     The lower boundary value to which the smallest count in the cloud is
     scaled. Defaults to 0.66 (ems)
+
+   sort_field
+    Select the field to sort the output by. Values are; *tag*, *count* or
+    *value*. If set to *undef* the output order will be the same as the
+    order of the calls to "add". If set to a code ref it will be called as a
+    sort comparison subroutine and passed two tag references whose keys are
+    values listed above
+
+   sort_order
+    Either *asc* for ascending or *desc* for descending sort order
+
+   sort_type
+    Either *alpha* to use the "cmp" operator or *numeric* to use the "<=>"
+    operator in sorting comparisons
 
 Subroutines/Methods
   add
@@ -122,6 +139,9 @@ Acknowledgements
     Originally WWW::CloudCreator
         This did not let me calculate font sizes in ems
 
+    HTML::TagCloud::Sortable
+        I lifted the sorting code from here
+
 Dependencies
     Class::Accessor::Fast
     Readonly
@@ -137,7 +157,7 @@ Author
     Peter Flanigan, "<Support at RoxSoft.co.uk>"
 
 License and Copyright
-    Copyright (c) 2007 Peter Flanigan. All rights reserved.
+    Copyright (c) 2008 Peter Flanigan. All rights reserved.
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself. See perlartistic.

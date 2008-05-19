@@ -1,0 +1,9 @@
+2008-05-19  Peter Flanigan  <pjf@localhost>
+
+	* lib/Data/CloudWeights.pm (formation):
+
+	Added limit to size of returned list
+
+	* lib/Data/CloudWeights.pm (formation):
+
+	Added sortable output fields
