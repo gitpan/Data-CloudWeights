@@ -1,6 +1,6 @@
 ---
 name: Data-CloudWeights
-version: 0.2.50
+version: 0.2.51
 author:
   - 'Peter Flanigan, C<< <Support at RoxSoft.co.uk> >>'
 abstract: Calculate values for an HTML tag cloud
@@ -12,10 +12,13 @@ requires:
   Readonly: 1.03
   perl: 5.8
   version: 0.74
+build_requires:
+  Test::More: 0.74
+  version: 0.74
 provides:
   Data::CloudWeights:
     file: lib/Data/CloudWeights.pm
-    version: 0.2.50
+    version: 0.2.51
 generated_by: Module::Build version 0.2808
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
