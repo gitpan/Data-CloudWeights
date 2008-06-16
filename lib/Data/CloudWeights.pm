@@ -1,6 +1,6 @@
 package Data::CloudWeights;
 
-# @(#)$Id: CloudWeights.pm 51 2008-06-02 18:21:30Z pjf $
+# @(#)$Id: CloudWeights.pm 57 2008-06-09 09:18:19Z pjf $
 # Originally WWW::CloudCreator. Now returns even more raw result
 
 use strict;
@@ -8,7 +8,7 @@ use warnings;
 use base qw(Class::Accessor::Fast);
 use Readonly;
 
-use version; our $VERSION = qv( sprintf '0.2.%d', q$Rev: 51 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.2.%d', q$Rev: 57 $ =~ /\d+/gmx );
 
 Readonly my %ATTRS =>
    ( # Input. Set in constructor or call mutator before formation method
@@ -243,7 +243,7 @@ Data::CloudWeights - Calculate values for an HTML tag cloud
 
 =head1 Version
 
-0.2.$Rev: 51 $
+0.2.$Rev: 57 $
 
 =head1 Synopsis
 
@@ -456,4 +456,3 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE
 # mode: perl
 # tab-width: 3
 # End:
-
