@@ -2,7 +2,7 @@ Name
     Data::CloudWeights - Calculate values for an HTML tag cloud
 
 Version
-    0.2.$Rev: 60 $
+    0.2.$Rev: 65 $
 
 Synopsis
        use Data::CloudWeights;
@@ -37,7 +37,7 @@ Configuration and Environment
 
    cold_colour
     The six character hex colour for the smallest count in the cloud.
-    Defaults to 0000FF (blue)
+    Defaults to *0000FF* (blue)
 
    colour_pallet
     An array ref of hex colour values. If the cold_colour attribute is set
@@ -53,7 +53,7 @@ Configuration and Environment
 
    hot_colour
     The six character hex colour for the highest count in the cloud.
-    Defaults to FF0000 (red)
+    Defaults to *FF0000* (red)
 
    limit
     Limits the size of the returned list. Defaults to zero, no limit
