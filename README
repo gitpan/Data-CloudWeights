@@ -2,7 +2,7 @@ Name
     Data::CloudWeights - Calculate values for an HTML tag cloud
 
 Version
-    0.2.$Rev: 70 $
+    0.2.$Rev: 71 $
 
 Synopsis
        use Data::CloudWeights;

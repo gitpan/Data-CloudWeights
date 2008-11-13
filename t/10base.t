@@ -1,17 +1,23 @@
 #!/usr/bin/perl
 
-# @(#)$Id: 10base.t 48 2008-05-19 17:07:59Z pjf $
+# @(#)$Id: 10base.t 71 2008-11-13 00:27:55Z pjf $
 
 use strict;
 use warnings;
 use English qw(-no_match_vars);
 use FindBin qw($Bin);
 use lib qq($Bin/../lib);
-use Test::More tests => 14;
+use Test::More;
 
-use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev: 48 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev: 71 $ =~ /\d+/gmx );
 
-BEGIN { use_ok q(Data::CloudWeights) }
+if ($ENV{AUTOMATED_TESTING} || ($ENV{PERL5OPT} || q()) =~ m{ CPAN-Reporter }mx) {
+   plan skip_all => q(CPAN Testing stopped);
+}
+
+plan tests => 14;
+
+use_ok q(Data::CloudWeights);
 
 my $cloud  = Data::CloudWeights->new();
 my $nimbus = $cloud->formation();
