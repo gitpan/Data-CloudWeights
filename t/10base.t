@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# @(#)$Id: 10base.t 71 2008-11-13 00:27:55Z pjf $
+# @(#)$Id: 10base.t 74 2008-11-14 03:47:30Z pjf $
 
 use strict;
 use warnings;
@@ -9,13 +9,16 @@ use FindBin qw($Bin);
 use lib qq($Bin/../lib);
 use Test::More;
 
-use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev: 71 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev: 74 $ =~ /\d+/gmx );
 
-if ($ENV{AUTOMATED_TESTING} || ($ENV{PERL5OPT} || q()) =~ m{ CPAN-Reporter }mx) {
-   plan skip_all => q(CPAN Testing stopped);
+BEGIN {
+   if ($ENV{AUTOMATED_TESTING}
+       || ($ENV{PERL5OPT} || q()) =~ m{ CPAN-Reporter }mx) {
+      plan skip_all => q(CPAN Testing stopped);
+   }
+
+   plan tests => 14;
 }
-
-plan tests => 14;
 
 use_ok q(Data::CloudWeights);
 
