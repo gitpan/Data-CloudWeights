@@ -1,20 +1,18 @@
-#!/usr/bin/perl
-
-# @(#)$Id: 10base.t 78 2009-02-22 02:49:08Z pjf $
+# @(#)$Id: 10base.t 94 2009-06-12 12:54:00Z pjf $
 
 use strict;
 use warnings;
-use English qw(-no_match_vars);
-use FindBin qw($Bin);
-use lib qq($Bin/../lib);
-use Test::More;
+use version; our $VERSION = qv( sprintf '0.3.%d', q$Rev: 94 $ =~ /\d+/gmx );
+use File::Spec::Functions;
+use FindBin qw( $Bin );
+use lib catdir( $Bin, updir, q(lib) );
 
-use version; our $VERSION = qv( sprintf '0.1.%d', q$Rev: 78 $ =~ /\d+/gmx );
+use English qw( -no_match_vars );
+use Test::More;
 
 BEGIN {
    if ($ENV{AUTOMATED_TESTING} || $ENV{PERL_CR_SMOKER_CURRENT}
-       || ($ENV{PERL5OPT} || q()) =~ m{ CPAN-Reporter }mx
-       || ($ENV{PERL5_CPANPLUS_IS_RUNNING} && $ENV{PERL5_CPAN_IS_RUNNING})) {
+       || ($ENV{PERL5OPT} || q()) =~ m{ CPAN-Reporter }mx) {
       plan skip_all => q(CPAN Testing stopped);
    }
 
@@ -70,3 +68,8 @@ $cloud->limit( 1 );
 $nimbus = $cloud->formation();
 
 ok( @{ $nimbus } == 1, q(Output limit) );
+
+# Local Variables:
+# mode: perl
+# tab-width: 3
+# End:
