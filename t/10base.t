@@ -1,8 +1,8 @@
-# @(#)$Id: 10base.t 94 2009-06-12 12:54:00Z pjf $
+# @(#)$Id: 10base.t 103 2009-06-29 01:02:16Z pjf $
 
 use strict;
 use warnings;
-use version; our $VERSION = qv( sprintf '0.3.%d', q$Rev: 94 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.3.%d', q$Rev: 103 $ =~ /\d+/gmx );
 use File::Spec::Functions;
 use FindBin qw( $Bin );
 use lib catdir( $Bin, updir, q(lib) );
@@ -11,8 +11,8 @@ use English qw( -no_match_vars );
 use Test::More;
 
 BEGIN {
-   if ($ENV{AUTOMATED_TESTING} || $ENV{PERL_CR_SMOKER_CURRENT}
-       || ($ENV{PERL5OPT} || q()) =~ m{ CPAN-Reporter }mx) {
+   if ($ENV{AUTOMATED_TESTING}  || $ENV{PERL_CR_SMOKER_CURRENT} ||
+       $ENV{PERL5_MINISMOKEBOX} || $ENV{PERL5_YACSMOKE_BASE}) {
       plan skip_all => q(CPAN Testing stopped);
    }
 

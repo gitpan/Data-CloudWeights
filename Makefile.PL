@@ -14,8 +14,8 @@ WriteMakefile
           'VERSION_FROM' => 'lib/Data/CloudWeights.pm',
           'PREREQ_PM' => {
                            'Class::Accessor::Fast' => '0.31',
-                           'Readonly' => '1.03',
                            'Test::More' => '0.74',
+                           'parent' => '0.221',
                            'version' => '0.74'
                          },
           'INSTALLDIRS' => 'site',

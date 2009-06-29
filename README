@@ -2,7 +2,7 @@ Name
     Data::CloudWeights - Calculate values for an HTML tag cloud
 
 Version
-    0.3.$Rev: 94 $
+    0.3.$Rev: 103 $
 
 Synopsis
        use Data::CloudWeights;
@@ -28,59 +28,60 @@ Description
     colour with a font size set equal to the scaled value in the result
 
 Configuration and Environment
+    Attributes defined by this class:
+
+    *cold_colour*
+       The six character hex colour for the smallest count in the cloud.
+       Defaults to *0000FF* (blue)
+
+    *colour_pallet*
+       An array ref of hex colour values. If the cold_colour attribute is
+       set to null then the colour values from the pallet are used instead
+       of calculating the colour value from the scaled count. Defaults to
+       twelve values that give an even transition from blue to red
+
+    *decimal_places*
+       The number of decimal places returned in the size attribute. Defaults
+       to 2. With the default values for high and low this lets you set the
+       tags font size in ems. If set to 0 and the high/low values suitably
+       changed tag font size can be set in pixies
+
+    *hot_colour*
+       The six character hex colour for the highest count in the cloud.
+       Defaults to *FF0000* (red)
+
+    *limit*
+       Limits the size of the returned list. Defaults to zero, no limit
+
+    *max_size*
+       The upper boundary value to which the highest count in the cloud is
+       scaled. Defaults to 2.0 (ems)
+
+    *min_size*
+       The lower boundary value to which the smallest count in the cloud is
+       scaled. Defaults to 0.66 (ems)
+
+    *sort_field*
+       Select the field to sort the output by. Values are; *tag*, *count* or
+       *value*. If set to *undef* the output order will be the same as the
+       order of the calls to "add". If set to a code ref it will be called
+       as a sort comparison subroutine and passed two tag references whose
+       keys are values listed above
+
+    *sort_order*
+       Either *asc* for ascending or *desc* for descending sort order
+
+    *sort_type*
+       Either *alpha* to use the "cmp" operator or *numeric* to use the
+       "<=>" operator in sorting comparisons
+
+Subroutines/Methods
   new
        $cloud = Data::CloudWeights->new( [{] attr => value, ... [}] )
 
     This is a class method, the constructor for Data::CloudWeights. Options
-    are passed as either a list of keyword value pairs or a hash ref.
-    Options are:
+    are passed as either a list of keyword value pairs or a hash ref
 
-   cold_colour
-    The six character hex colour for the smallest count in the cloud.
-    Defaults to *0000FF* (blue)
-
-   colour_pallet
-    An array ref of hex colour values. If the cold_colour attribute is set
-    to null then the colour values from the pallet are used instead of
-    calculating the colour value from the scaled count. Defaults to twelve
-    values that give an even transition from blue to red
-
-   decimal_places
-    The number of decimal places returned in the size attribute. Defaults to
-    2. With the default values for high and low this lets you set the tags
-    font size in ems. If set to 0 and the high/low values suitably changed
-    tag font size can be set in pixies
-
-   hot_colour
-    The six character hex colour for the highest count in the cloud.
-    Defaults to *FF0000* (red)
-
-   limit
-    Limits the size of the returned list. Defaults to zero, no limit
-
-   max_size
-    The upper boundary value to which the highest count in the cloud is
-    scaled. Defaults to 2.0 (ems)
-
-   min_size
-    The lower boundary value to which the smallest count in the cloud is
-    scaled. Defaults to 0.66 (ems)
-
-   sort_field
-    Select the field to sort the output by. Values are; *tag*, *count* or
-    *value*. If set to *undef* the output order will be the same as the
-    order of the calls to "add". If set to a code ref it will be called as a
-    sort comparison subroutine and passed two tag references whose keys are
-    values listed above
-
-   sort_order
-    Either *asc* for ascending or *desc* for descending sort order
-
-   sort_type
-    Either *alpha* to use the "cmp" operator or *numeric* to use the "<=>"
-    operator in sorting comparisons
-
-Subroutines/Methods
   add
        $cloud->add( $name, $count, $value );
 
@@ -132,6 +133,12 @@ Subroutines/Methods
     selected from the 'pallet' instead of calculating it using a continuous
     function
 
+  _merge_attrs
+       $attrs = $class->_merge_attrs( @rest );
+
+    Merge config defaults with supplied parameters and return the object's
+    attribute hash. Called from the constructor
+
 Diagnostics
     None
 
@@ -144,7 +151,6 @@ Acknowledgements
 
 Dependencies
     Class::Accessor::Fast
-    Readonly
 
 Incompatibilities
     There are no known incompatibilities in this module
@@ -157,7 +163,7 @@ Author
     Peter Flanigan, "<Support at RoxSoft.co.uk>"
 
 License and Copyright
-    Copyright (c) 2008 Peter Flanigan. All rights reserved
+    Copyright (c) 2008-2009 Peter Flanigan. All rights reserved
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself. See perlartistic
