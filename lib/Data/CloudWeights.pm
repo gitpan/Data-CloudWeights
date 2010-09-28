@@ -1,11 +1,11 @@
-# @(#)$Id: CloudWeights.pm 108 2010-09-22 19:19:50Z pjf $
+# @(#)$Id: CloudWeights.pm 112 2010-09-28 19:33:14Z pjf $
 # Originally WWW::CloudCreator. Now returns even more raw result
 
 package Data::CloudWeights;
 
 use strict;
 use warnings;
-use version; our $VERSION = qv( sprintf '0.5.%d', q$Rev: 108 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.5.%d', q$Rev: 112 $ =~ /\d+/gmx );
 use parent qw(Class::Accessor::Fast);
 
 my %I_ATTRS =
@@ -244,7 +244,7 @@ Data::CloudWeights - Calculate values for an HTML tag cloud
 
 =head1 Version
 
-0.5.$Rev: 108 $
+0.5.$Rev: 112 $
 
 =head1 Synopsis
 
@@ -469,4 +469,3 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE
 # mode: perl
 # tab-width: 3
 # End:
-
