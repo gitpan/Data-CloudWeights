@@ -2,7 +2,7 @@ Name
     Data::CloudWeights - Calculate values for an HTML tag cloud
 
 Version
-    0.5.$Rev: 112 $
+    0.6.$Rev: 122 $
 
 Synopsis
        use Data::CloudWeights;
@@ -32,7 +32,7 @@ Configuration and Environment
 
     *cold_colour*
        The six character hex colour for the smallest count in the cloud.
-       Defaults to *0000FF* (blue)
+       Defaults to *#0000FF* (blue)
 
     *colour_pallet*
        An array ref of hex colour values. If the cold_colour attribute is
@@ -48,18 +48,18 @@ Configuration and Environment
 
     *hot_colour*
        The six character hex colour for the highest count in the cloud.
-       Defaults to *FF0000* (red)
+       Defaults to *#FF0000* (red)
 
     *limit*
        Limits the size of the returned list. Defaults to zero, no limit
 
     *max_size*
        The upper boundary value to which the highest count in the cloud is
-       scaled. Defaults to 2.0 (ems)
+       scaled. Defaults to 3.0 (ems)
 
     *min_size*
        The lower boundary value to which the smallest count in the cloud is
-       scaled. Defaults to 0.66 (ems)
+       scaled. Defaults to 1.0 (ems)
 
     *sort_field*
        Select the field to sort the output by. Values are; *tag*, *count* or
@@ -81,6 +81,11 @@ Subroutines/Methods
 
     This is a class method, the constructor for Data::CloudWeights. Options
     are passed as either a list of keyword value pairs or a hash ref
+
+  BUILD
+    If the "hot_colour" or "cold_colour" attributes are undefined a discreet
+    colour value will be selected from the 'pallet' instead of calculating
+    it using Color::Spectrum
 
   add
        $cloud->add( $name, $count, $value );
@@ -119,26 +124,6 @@ Subroutines/Methods
     scalar. If multiple calls to add the same tag were made this will be an
     array ref containing each of the passed values
 
-  _hex2dec
-       $class->_hex2dec( $index, $hex_value );
-
-    Private method converts a two character string representation of a
-    number to a decimal integer in the range 0 - 255
-
-  _calculate_temperature
-       $obj->_calculate_temperature( $count );
-
-    Private method used internally to calculate a colour value for a tag. If
-    the 'hot' or 'cold' value is undefined a discreet colour value will be
-    selected from the 'pallet' instead of calculating it using a continuous
-    function
-
-  _merge_attrs
-       $attrs = $class->_merge_attrs( @rest );
-
-    Merge config defaults with supplied parameters and return the object's
-    attribute hash. Called from the constructor
-
 Diagnostics
     None
 
@@ -150,7 +135,7 @@ Acknowledgements
        I lifted the sorting code from here
 
 Dependencies
-    Class::Accessor::Fast
+    Moose
 
 Incompatibilities
     There are no known incompatibilities in this module
@@ -163,7 +148,7 @@ Author
     Peter Flanigan, "<Support at RoxSoft.co.uk>"
 
 License and Copyright
-    Copyright (c) 2008-2009 Peter Flanigan. All rights reserved
+    Copyright (c) 2008-2010 Peter Flanigan. All rights reserved
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself. See perlartistic

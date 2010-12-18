@@ -1,20 +1,21 @@
-# @(#)$Id: 10base.t 108 2010-09-22 19:19:50Z pjf $
+# @(#)$Id: 10base.t 120 2010-12-18 19:03:58Z pjf $
 
 use strict;
 use warnings;
-use version; our $VERSION = qv( sprintf '0.5.%d', q$Rev: 108 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.6.%d', q$Rev: 120 $ =~ /\d+/gmx );
 use File::Spec::Functions;
 use FindBin qw( $Bin );
 use lib catdir( $Bin, updir, q(lib) );
 
 use English qw( -no_match_vars );
+use Module::Build;
 use Test::More;
 
 BEGIN {
-   if ($ENV{AUTOMATED_TESTING}  || $ENV{PERL_CR_SMOKER_CURRENT} ||
-       $ENV{PERL5_MINISMOKEBOX} || $ENV{PERL5_YACSMOKE_BASE}) {
-      plan skip_all => q(CPAN Testing stopped);
-   }
+   my $current = eval { Module::Build->current };
+
+   $current and $current->notes->{stop_tests}
+            and plan skip_all => q(CPAN Testing stopped);
 
    plan tests => 14;
 }
@@ -32,7 +33,7 @@ $nimbus = $cloud->formation();
 
 ok( $nimbus && $nimbus->[0]->{count} == 1, q(Single count) );
 
-ok( $nimbus->[0]->{colour} eq q(FF0000), q(Single colour) );
+ok( $nimbus->[0]->{colour} eq q(#FF0000), q(Single colour) );
 
 ok( $cloud->add( q(tag0), 1, 1 ) == 1, q(Add return value - 3) );
 

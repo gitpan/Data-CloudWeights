@@ -19,12 +19,13 @@ no_index:
 provides:
   Data::CloudWeights:
     file: lib/Data/CloudWeights.pm
-    version: 0.5.112
+    version: 0.6.122
 requires:
-  Class::Accessor::Fast: 0.31
+  Color::Spectrum: 1.06
+  Moose: 1.21
   parent: 0.221
   perl: 5.008
   version: 0.74
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.5.112
+version: 0.6.122

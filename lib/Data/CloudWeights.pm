@@ -1,73 +1,80 @@
-# @(#)$Id: CloudWeights.pm 112 2010-09-28 19:33:14Z pjf $
-# Originally WWW::CloudCreator. Now returns even more raw result
+# @(#)$Id: CloudWeights.pm 122 2010-12-18 19:09:24Z pjf $
 
 package Data::CloudWeights;
 
 use strict;
-use warnings;
-use version; our $VERSION = qv( sprintf '0.5.%d', q$Rev: 112 $ =~ /\d+/gmx );
-use parent qw(Class::Accessor::Fast);
+use namespace::autoclean;
+use version; our $VERSION = qv( sprintf '0.6.%d', q$Rev: 122 $ =~ /\d+/gmx );
 
-my %I_ATTRS =
-   ( # Input. Set in constructor or call mutator before formation method
-     cold_colour    => q(0000FF),   # Blue
-     colour_pallet  => [ qw(CC33FF 663399 3300CC 99CCFF
-                            00FFFF 66FFCC 66CC99 006600
-                            CCFF66 FFFF33 FF6600 FF0000) ],
-     decimal_places => 3,           # Defaults for ems
-     hot_colour     => q(FF0000),   # Red
-     limit          => 0,           # Max size of returned list. Zero no limit
-     max_size       => 3.0,         # Output size no more than
-     min_size       => 1.0,         # Output size no less than
-     sort_field     => q(tag),      # Output sorted by this field
-     sort_order     => q(asc),      # Sort order - asc   or desc
-     sort_type      => q(alpha), ); # Sort type  - alpha or numeric
+use Color::Spectrum;
+use Moose;
+use Moose::Util::TypeConstraints;
 
-my %O_ATTRS =
-   ( # Output. Calling accessors becomes useful after last call to add method
-     max_count      => 0,           # Current max value across all tags cloud
-     min_count      => -1,          # Current min
-     total_count    => 0, );        # Current total for all tags in the cloud
+enum 'D_CW_Sort_Order' => qw(asc desc);
+enum 'D_CW_Sort_Type'  => qw(alpha numeric);
 
-my %P_ATTRS =
-   ( # Private.
-     _base          => undef,
-     _indx          => undef,
-     _step          => undef,
-     _tags          => undef, );
+subtype 'D_CW_Colour'  => as 'Str' => where { '#' eq substr $_, 0, 1 };
 
-my %SORTS =
-   ( alpha => {
-        asc  => sub {
-           my $f = shift; return sub { $_[ 0 ]->{ $f } cmp $_[ 1 ]->{ $f } }
-        },
-        desc => sub {
-           my $f = shift; return sub { $_[ 1 ]->{ $f } cmp $_[ 0 ]->{ $f } }
-        },
-     },
-     numeric => {
-        asc  => sub {
-           my $f = shift; return sub { $_[ 0 ]->{ $f } <=> $_[ 1 ]->{ $f } }
-        },
-        desc => sub {
-           my $f = shift; return sub { $_[ 1 ]->{ $f } <=> $_[ 0 ]->{ $f } }
-        },
-     }, );
+has 'cold_colour'    => is => 'ro', isa => 'Maybe[D_CW_Colour]',
+   default           => '#0000FF', documentation => 'Blue';
+has 'hot_colour'     => is => 'ro', isa => 'Maybe[D_CW_Colour]',
+   default           => '#FF0000', documentation => 'Red';
 
-__PACKAGE__->mk_accessors( keys %I_ATTRS, keys %O_ATTRS, keys %P_ATTRS );
+has 'colour_pallet'  => is => 'rw', isa => 'ArrayRef[D_CW_Colour]',
+   default           => sub { [ '#CC33FF', '#663399', '#3300CC', '#99CCFF',
+                                '#00FFFF', '#66FFCC', '#66CC99', '#006600',
+                                '#CCFF66', '#FFFF33', '#FF6600', '#FF0000' ] },
+   documentation     => 'Alternative to colour calculation';
+has 'decimal_places' => is => 'rw', isa => 'Int', default => 3,
+   documentation     => 'Defaults for ems';
+has 'limit'          => is => 'rw', isa => 'Int', default => 0,
+   documentation     => 'Max size of returned list. Zero no limit';
+has 'max_count'      => is => 'rw', isa => 'Int', default => 0,
+   documentation     => 'Current max value across all tags cloud';
+has 'max_size'       => is => 'rw', isa => 'Num', default => 3.0,
+   documentation     => 'Output size no more than';
+has 'min_count'      => is => 'rw', isa => 'Int', default => -1,
+   documentation     => 'Current min';
+has 'min_size'       => is => 'rw', isa => 'Num', default => 1.0,
+   documentation     => 'Output size no less than';
+has 'sort_field'     => is => 'rw', isa => 'Maybe[Str]', default => 'tag',
+   documentation     => 'Output sorted by this field';
+has 'sort_order'     => is => 'rw', isa => 'D_CW_Sort_Order', default => 'asc',
+   documentation     => 'Sort order - asc   or desc';
+has 'sort_type'      => is => 'rw', isa => 'D_CW_Sort_Type', default => 'alpha',
+   documentation     => 'Sort type  - alpha or numeric';
+has 'total_count'    => is => 'rw', isa => 'Int', default => 0,
+   documentation     => 'Current total for all tags in the cloud';
 
-sub new {
-   # Constructor accepts a hash ref or a list of key value pairs
-   my ($self, @rest) = @_;
+has '_index' => is => 'ro', isa => 'HashRef',  default => sub { {} };
+has '_sorts' => is => 'ro', isa => 'HashRef',  default => sub { {
+   alpha   => {
+      asc  => sub { my $x = shift; sub { $_[ 0 ]->{ $x } cmp $_[ 1 ]->{ $x } }
+      },
+      desc => sub { my $x = shift; sub { $_[ 1 ]->{ $x } cmp $_[ 0 ]->{ $x } }
+      },
+   },
+   numeric => {
+      asc  => sub { my $x = shift; sub { $_[ 0 ]->{ $x } <=> $_[ 1 ]->{ $x } }
+      },
+      desc => sub { my $x = shift; sub { $_[ 1 ]->{ $x } <=> $_[ 0 ]->{ $x } }
+      },
+   } } };
+has '_tags'  => is => 'ro', isa => 'ArrayRef', default => sub { [] };
 
-   my $new = bless $self->_merge_attrs( @rest ), ref $self || $self;
+sub BUILD {
+   my $self = shift;
 
-   $new->_base( [] );
-   $new->_indx( {} );
-   $new->_step( [] );
-   $new->_tags( [] );
+   # Unsetting hot or cold colour strings in the constructor will cause
+   # the default pallet to be used instead
+   if ($self->cold_colour and $self->hot_colour) {
+      my $cs = Color::Spectrum->new();
 
-   return $new;
+      $self->colour_pallet( [ $cs->generate( 12, $self->cold_colour,
+                                             $self->hot_colour ) ] );
+   }
+
+   return;
 }
 
 sub add {
@@ -82,27 +89,28 @@ sub add {
    # Add this count to the total for this cloud
    $self->total_count( $self->total_count + $count );
 
-   unless (exists $self->_indx->{ $tag }) {
+   unless (exists $self->_index->{ $tag }) {
       # Create a new tag reference and add to both list and index
       my $tag_ref = { count => $count, tag => $tag, value => $value };
 
-      push @{ $self->_tags }, $self->_indx->{ $tag } = $tag_ref;
+      push @{ $self->_tags }, $self->_index->{ $tag } = $tag_ref;
    }
    else {
+      my $index = $self->_index->{ $tag };
+
       # Calls with the same tag are cumulative
-      $count += $self->_indx->{ $tag }->{count};
-      $self->_indx->{ $tag }->{count} = $count;
+      $count += $index->{count}; $index->{count} = $count;
 
       if (defined $value) {
-         my $tag_value = $self->_indx->{ $tag }->{value};
+         my $tag_value = $index->{value};
 
          # Make an array if there are two or more calls to add the same tag
          $tag_value and ref $tag_value ne q(ARRAY)
-            and $self->_indx->{ $tag }->{value} = [ $tag_value ];
+            and $index->{value} = [ $tag_value ];
 
          # Push passed value in each call onto the values array.
-         if ($tag_value) { push @{ $self->_indx->{ $tag }->{value} }, $value }
-         else { $self->_indx->{ $tag }->{value} = $value }
+         if ($tag_value) { push @{ $index->{value} }, $value }
+         else { $index->{value} = $value }
       }
    }
 
@@ -119,6 +127,7 @@ sub formation {
    # Calculate the result set for this cloud
    my $self    = shift;
    my $prec    = 10**$self->decimal_places;
+   my $bands   = scalar @{ $self->colour_pallet } - 1;
    my $range   = (abs $self->max_count - $self->min_count) || 1;
    my $step    = ($self->max_size - $self->min_size) / $range;
    my $compare = $self->_get_sort_method;
@@ -127,7 +136,7 @@ sub formation {
 
    $ntags == 0 and return $out; # No calls to add were made
 
-   if ($ntags == 1) {            # One call to add was made
+   if ($ntags == 1) {           # One call to add was made
       $out = [ { colour  => $self->hot_colour || pop @{ $self->colour_pallet },
                  count   => $self->_tags->[ 0 ]->{count},
                  percent => 100,
@@ -139,12 +148,14 @@ sub formation {
 
    for (sort { $compare->( $a, $b ) } @{ $self->_tags }) {
       my $count   = $_->{count};
+      my $base    = $count - $self->min_count;
+      my $index   = int 0.5 + ($base * $bands / $range);
       my $percent = 100 * $count / $self->total_count;
-      my $size    = $self->min_size + $step * ($count - $self->min_count);
+      my $size    = $self->min_size + $step * $base;
 
       # Push the return array with a hash ref for each key value pair
       # passed to the add method
-      push @{ $out }, { colour  => $self->_calculate_temperature( $count ),
+      push @{ $out }, { colour  => $self->colour_pallet->[ $index ],
                         count   => $count,
                         percent => (int 0.5 + $prec * $percent) / $prec,
                         size    => (int 0.5 + $prec * $size   ) / $prec,
@@ -168,8 +179,8 @@ sub _get_sort_method {
 
    ref $field and return $field; # User supplied subroutine
 
-   my $orderby = $SORTS{ lc $self->sort_type  }
-                       { lc $self->sort_order }->( $field );
+   my $orderby = $self->_sorts->{ lc $self->sort_type  }
+                              ->{ lc $self->sort_order }->( $field );
 
    # Protect against wrong sort type for the data
    return $field ne q(tag)
@@ -177,60 +188,10 @@ sub _get_sort_method {
         : $orderby;
 }
 
-sub _hex2dec {
-   # Simple conversion sub
-   my ($self, $index, $val) = @_;
+__PACKAGE__->meta->make_immutable;
 
-   return 16 * (hex substr $val, 2 * $index, 1)
-             + (hex substr $val, 2 * $index + 1, 1);
-}
-
-sub _calculate_temperature {
-   # Generate an RGB colour for a given count
-   my ($self, $cnt) = @_; $cnt -= $self->min_count;
-
-   my $colour; my $range = (abs $self->max_count - $self->min_count) || 1;
-
-   # Unsetting hot or cold colour strings in the constructor will cause
-   # the pallet to be used instead of the exact calculation method
-
-   if ($self->hot_colour and $self->cold_colour) {
-      unless (defined $self->_base->[ 0 ]) {
-         # Setup the RGB colour increment steps
-         for (0 .. 2) {
-            my $cold = $self->_base->[ $_ ]
-                     = $self->_hex2dec( $_, $self->cold_colour );
-            my $hot  = $self->_hex2dec( $_, $self->hot_colour );
-
-            $self->_step->[ $_ ] = ($hot - $cold) / $range;
-         }
-      }
-
-      # Exact calculation method
-      for (0 .. 2) {
-         my $hex = $self->_base->[ $_ ] + $cnt * $self->_step->[ $_ ];
-
-         $colour .= sprintf '%02x', $hex;
-      }
-   }
-   else {
-      # Select colour from the pallet by allocating the value to a band
-      my $bands = scalar @{ $self->colour_pallet };
-      my $index = int 0.5 + ($cnt * ($bands - 1) / $range);
-
-      $colour = $self->colour_pallet->[ $index ];
-   }
-
-   return $colour;
-}
-
-sub _merge_attrs {
-   my ($self, @rest) = @_;
-
-   my $args = $rest[ 0 ] && ref $rest[ 0 ] eq q(HASH) ? $rest[ 0 ] : { @rest };
-
-   return { %I_ATTRS, %{ $args }, %O_ATTRS };
-}
+no Moose::Util::TypeConstraints;
+no Moose;
 
 1;
 
@@ -244,7 +205,7 @@ Data::CloudWeights - Calculate values for an HTML tag cloud
 
 =head1 Version
 
-0.5.$Rev: 112 $
+0.6.$Rev: 122 $
 
 =head1 Synopsis
 
@@ -280,7 +241,7 @@ Attributes defined by this class:
 =item I<cold_colour>
 
 The six character hex colour for the smallest count in the
-cloud. Defaults to I<0000FF> (blue)
+cloud. Defaults to I<#0000FF> (blue)
 
 =item I<colour_pallet>
 
@@ -299,7 +260,7 @@ changed tag font size can be set in pixies
 =item I<hot_colour>
 
 The six character hex colour for the highest count in the
-cloud. Defaults to I<FF0000> (red)
+cloud. Defaults to I<#FF0000> (red)
 
 =item I<limit>
 
@@ -308,12 +269,12 @@ Limits the size of the returned list. Defaults to zero, no limit
 =item I<max_size>
 
 The upper boundary value to which the highest count in the cloud is
-scaled. Defaults to 2.0 (ems)
+scaled. Defaults to 3.0 (ems)
 
 =item I<min_size>
 
 The lower boundary value to which the smallest count in the cloud is
-scaled. Defaults to 0.66 (ems)
+scaled. Defaults to 1.0 (ems)
 
 =item I<sort_field>
 
@@ -343,6 +304,12 @@ C<< <=> >> operator in sorting comparisons
 This is a class method, the constructor for
 L<Data::CloudWeights>. Options are passed as either a list of keyword
 value pairs or a hash ref
+
+=head2 BUILD
+
+If the C<hot_colour> or C<cold_colour> attributes are undefined a
+discreet colour value will be selected from the 'pallet' instead of
+calculating it using L<Color::Spectrum>
 
 =head2 add
 
@@ -389,29 +356,6 @@ The supplied value for this tag. This is usually an href but can be
 any scalar. If multiple calls to add the same tag were made this will
 be an array ref containing each of the passed values
 
-=head2 _hex2dec
-
-   $class->_hex2dec( $index, $hex_value );
-
-Private method converts a two character string representation of a
-number to a decimal integer in the range 0 - 255
-
-=head2 _calculate_temperature
-
-   $obj->_calculate_temperature( $count );
-
-Private method used internally to calculate a colour value for a
-tag. If the 'hot' or 'cold' value is undefined a discreet colour value
-will be selected from the 'pallet' instead of calculating it using a
-continuous function
-
-=head2 _merge_attrs
-
-   $attrs = $class->_merge_attrs( @rest );
-
-Merge config defaults with supplied parameters and return the object's
-attribute hash. Called from the constructor
-
 =head1 Diagnostics
 
 None
@@ -434,7 +378,7 @@ I lifted the sorting code from here
 
 =over 3
 
-=item L<Class::Accessor::Fast>
+=item L<Moose>
 
 =back
 
@@ -454,7 +398,7 @@ Peter Flanigan, C<< <Support at RoxSoft.co.uk> >>
 
 =head1 License and Copyright
 
-Copyright (c) 2008-2009 Peter Flanigan. All rights reserved
+Copyright (c) 2008-2010 Peter Flanigan. All rights reserved
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself. See L<perlartistic>
@@ -469,3 +413,4 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE
 # mode: perl
 # tab-width: 3
 # End:
+
