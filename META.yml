@@ -19,7 +19,7 @@ no_index:
 provides:
   Data::CloudWeights:
     file: lib/Data/CloudWeights.pm
-    version: 0.6.122
+    version: 0.6.124
 requires:
   Color::Spectrum: 1.06
   Moose: 1.21
@@ -28,4 +28,4 @@ requires:
   version: 0.74
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.6.122
+version: 0.6.124

@@ -1,4 +1,4 @@
-# @(#)$Id: Build.PL 122 2010-12-18 19:09:24Z pjf $
+# @(#)$Id: Build.PL 124 2011-02-22 13:09:46Z pjf $
 
 use strict;
 use warnings;
@@ -12,9 +12,10 @@ sub whimper { print {*STDOUT} $_[ 0 ]."\n"; exit 0 }
 
 BEGIN {
    eval { require 5.008; }; $EVAL_ERROR and whimper 'Perl minimum 5.8';
+   $ENV{PATH}   =~ m{ \A /home/sand }mx and whimper 'Stopped Konig';
 }
 
-use version; our $VERSION = qv( sprintf '0.6.%d', q$Rev: 122 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.6.%d', q$Rev: 124 $ =~ /\d+/gmx );
 
 use Module::Build;
 

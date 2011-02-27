@@ -2,7 +2,7 @@ Name
     Data::CloudWeights - Calculate values for an HTML tag cloud
 
 Version
-    0.6.$Rev: 122 $
+    0.6.$Rev: 124 $
 
 Synopsis
        use Data::CloudWeights;
@@ -135,6 +135,7 @@ Acknowledgements
        I lifted the sorting code from here
 
 Dependencies
+    Color::Spectrum
     Moose
 
 Incompatibilities
