@@ -7,7 +7,8 @@ build_requires:
 configure_requires:
   Module::Build: 0.32
   version: 0.74
-generated_by: 'Module::Build version 0.3607'
+dynamic_config: 1
+generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.110580'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -15,11 +16,13 @@ meta-spec:
 name: Data-CloudWeights
 no_index:
   directory:
+    - examples
+    - inc
     - t
 provides:
   Data::CloudWeights:
     file: lib/Data/CloudWeights.pm
-    version: 0.6.124
+    version: v0.6.130
 requires:
   Color::Spectrum: 1.06
   Moose: 1.21
@@ -27,5 +30,7 @@ requires:
   perl: 5.008
   version: 0.74
 resources:
+  bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-CloudWeights
+  homepage: http://www.roxsoft.co.uk
   license: http://dev.perl.org/licenses/
-version: 0.6.124
+version: 0.6.130

@@ -1,6 +1,8 @@
 Revision history for Data::CloudWeights
 
-0.6.124  2011-02-22
+0.6.128  2011-04-12
+         - Suppressed dcollins CPAN testing
+         - Moved boilerplate M::B subclass code to inc/Bob.pm
          - Suppressed Konig CPAN testing again
 
 0.6.122  2010-12-18

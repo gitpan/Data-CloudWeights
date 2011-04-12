@@ -1,0 +1,62 @@
+{
+   "abstract" : "Calculate values for an HTML tag cloud",
+   "author" : [
+      "Peter Flanigan, C<< <Support at RoxSoft.co.uk> >>"
+   ],
+   "dynamic_config" : 1,
+   "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.110580",
+   "license" : [
+      "perl_5"
+   ],
+   "meta-spec" : {
+      "url" : "http://search.cpan.org/perldoc?CPAN::Meta::Spec",
+      "version" : "2"
+   },
+   "name" : "Data-CloudWeights",
+   "no_index" : {
+      "directory" : [
+         "examples",
+         "inc",
+         "t"
+      ]
+   },
+   "prereqs" : {
+      "build" : {
+         "requires" : {
+            "Test::More" : "0.74"
+         }
+      },
+      "configure" : {
+         "requires" : {
+            "Module::Build" : "0.32",
+            "version" : "0.74"
+         }
+      },
+      "runtime" : {
+         "requires" : {
+            "Color::Spectrum" : "1.06",
+            "Moose" : "1.21",
+            "parent" : "0.221",
+            "perl" : "5.008",
+            "version" : "0.74"
+         }
+      }
+   },
+   "provides" : {
+      "Data::CloudWeights" : {
+         "file" : "lib/Data/CloudWeights.pm",
+         "version" : "v0.6.130"
+      }
+   },
+   "release_status" : "stable",
+   "resources" : {
+      "bugtracker" : {
+         "web" : "http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-CloudWeights"
+      },
+      "homepage" : "http://www.roxsoft.co.uk",
+      "license" : [
+         "http://dev.perl.org/licenses/"
+      ]
+   },
+   "version" : "0.6.130"
+}

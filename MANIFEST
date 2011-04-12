@@ -1,12 +1,14 @@
 Build.PL
 Changes
+inc/Bob.pm
 lib/Data/CloudWeights.pm
+LICENSE
 MANIFEST			This list of files
+META.yml
+README
 t/01always_pass.t
 t/02pod.t
 t/03podcoverage.t
 t/10base.t
-README
-LICENSE
-META.yml
+META.json
 SIGNATURE    Added here by Module::Build
