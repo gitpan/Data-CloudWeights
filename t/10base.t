@@ -1,13 +1,12 @@
-# @(#)$Id: 10base.t 127 2011-03-24 20:06:11Z pjf $
+# @(#)$Id: 10base.t 140 2012-04-19 22:23:02Z pjf $
 
 use strict;
 use warnings;
-use version; our $VERSION = qv( sprintf '0.6.%d', q$Rev: 127 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.7.%d', q$Rev: 140 $ =~ /\d+/gmx );
 use File::Spec::Functions;
 use FindBin qw( $Bin );
 use lib catdir( $Bin, updir, q(lib) );
 
-use English qw( -no_match_vars );
 use Module::Build;
 use Test::More;
 
@@ -16,59 +15,62 @@ BEGIN {
 
    $current and $current->notes->{stop_tests}
             and plan skip_all => $current->notes->{stop_tests};
-
-   plan tests => 14;
 }
 
-use_ok q(Data::CloudWeights);
+use English qw( -no_match_vars );
+use Data::CloudWeights;
 
-my $cloud  = Data::CloudWeights->new();
-my $nimbus = $cloud->formation();
+my $cloud = Data::CloudWeights->new;
 
-ok( $nimbus && ref $nimbus eq q(ARRAY) && !$nimbus->[0], q(Null formation) );
+isa_ok $cloud, 'Data::CloudWeights';
+can_ok $cloud, 'add';
+can_ok $cloud, 'formation';
 
-ok( $cloud->add( q(tag1), 1, 1 ) == 1, q(Add return value - 1) );
+my $nimbus = $cloud->formation;
 
-$nimbus = $cloud->formation();
+ok $nimbus && ref $nimbus eq q(ARRAY) && !$nimbus->[0], 'Null formation';
 
-ok( $nimbus && $nimbus->[0]->{count} == 1, q(Single count) );
+is $cloud->add( q(tag1), 1, 1 ), 1, 'Add return value - 1';
 
-ok( $nimbus->[0]->{colour} eq q(#FF0000), q(Single colour) );
+$nimbus = $cloud->formation;
 
-ok( $cloud->add( q(tag0), 1, 1 ) == 1, q(Add return value - 3) );
+is $nimbus && $nimbus->[0]->{count}, 1, 'Single count';
 
-$nimbus = $cloud->formation();
+is $nimbus->[0]->{colour}, '#FF0000', 'Single colour';
 
-ok( $nimbus->[1]->{tag} eq q(tag1), q(Second tag) );
+is $cloud->add( q(tag0), 1, 1 ), 1, 'Add return value - 3';
 
-$cloud->sort_field( undef );
-$nimbus = $cloud->formation();
+$nimbus = $cloud->formation;
 
-ok( $nimbus->[1]->{tag} eq q(tag0), q(No sort) );
+is $nimbus->[1]->{tag}, q(tag1), 'Second tag';
 
-ok( $cloud->add( q(tag2), 1, 3 ) == 1, q(Add return value - 4) );
+$cloud->sort_field( undef ); $nimbus = $cloud->formation;
 
-$cloud->sort_field( q(value) );
-$cloud->sort_type(  q(numeric) );
-$cloud->sort_order( q(desc) );
-$nimbus = $cloud->formation();
+is $nimbus->[1]->{tag}, q(tag0), 'No sort';
 
-ok( $nimbus->[0]->{tag} eq q(tag2), q(Sort desc numeric) );
+is $cloud->add( q(tag2), 1, 3 ), 1, 'Add return value - 4';
 
-ok( $cloud->add( q(tag1), 1, 2 ) == 2, q(Add return value - 2) );
+$cloud->sort_field( q(value) ); $cloud->sort_type( q(numeric) );
 
-$cloud->sort_field( q(tag) );
-$cloud->sort_type(  q(alpha) );
-$nimbus = $cloud->formation();
+$cloud->sort_order( q(desc) ); $nimbus = $cloud->formation;
 
-ok( $nimbus->[1]->{value}->[1] == 2, q(Tag value) );
+is $nimbus->[0]->{tag}, q(tag2), 'Sort desc numeric';
 
-ok( @{ $nimbus } == 3, q(No output limit) );
+is $cloud->add( q(tag1), 1, 2 ), 2, 'Add return value - 2';
 
-$cloud->limit( 1 );
-$nimbus = $cloud->formation();
+$cloud->sort_field( q(tag) ); $cloud->sort_type( q(alpha) );
 
-ok( @{ $nimbus } == 1, q(Output limit) );
+$nimbus = $cloud->formation;
+
+is $nimbus->[1]->{value}->[1], 2, 'Tag value';
+
+is @{ $nimbus }, 3, 'No output limit';
+
+$cloud->limit( 1 ); $nimbus = $cloud->formation;
+
+is @{ $nimbus }, 1, 'Output limit';
+
+done_testing;
 
 # Local Variables:
 # mode: perl

@@ -1,34 +1,35 @@
-# @(#)$Id: Bob.pm 130 2011-04-12 19:55:01Z pjf $
+# @(#)$Id: Bob.pm 139 2012-04-15 18:12:14Z pjf $
 
 package Bob;
 
 use strict;
 use warnings;
+use inc::CPANTesting;
 
 sub whimper { print {*STDOUT} $_[ 0 ]."\n"; exit 0 }
 
 BEGIN {
-   eval { require 5.008; };          $@ and whimper 'Perl minimum 5.8';
-   qx(uname -a) =~ m{ higgsboson    }mx and whimper 'Stopped dcollins';
-   qx(uname -a) =~ m{ profvince.com }mx and whimper 'Stopped vpit';
-   $ENV{PATH}   =~ m{ \A /home/sand }mx and whimper 'Stopped Konig';
+   my $reason; $reason = CPANTesting::broken_toolchain and whimper $reason;
 }
 
-use version; our $VERSION = qv( sprintf '0.4.%d', q$Rev: 130 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( '1.3' );
 
 use File::Spec::Functions;
 use Module::Build;
 
 sub new {
-   my ($class, $params) = @_;
+   my ($class, $params) = @_; $params ||= {}; $params->{requires} ||= {};
 
-   ($params and ref $params eq q(HASH)) or whimper 'No params hash';
+   my $perl_ver   = $params->{requires}->{perl} || 5.008_008;
 
-   my $module     = $params->{module};
-   my $distname   = $module; $distname =~ s{ :: }{-}gmx;
-   my $class_path = catfile( q(lib), split m{ :: }mx, $module.q(.pm) );
+   $] < $perl_ver and whimper "Perl minimum ${perl_ver}";
 
-   return Module::Build->new
+   my $module      = $params->{module} or whimper 'No module name';
+   my $distname    = $module; $distname =~ s{ :: }{-}gmx;
+   my $class_path  = catfile( q(lib), split m{ :: }mx, $module.q(.pm) );
+   my $build_class = __get_build_class( $params );
+
+   return $build_class->new
       ( add_to_cleanup     => [ q(Debian_CPANTS.txt), $distname.q(-*),
                                 map { ( q(*/) x $_ ).q(*~) } 0..5 ],
         build_requires     => $params->{build_requires},
@@ -37,7 +38,7 @@ sub new {
         create_packlist    => 0,
         create_readme      => 1,
         dist_version_from  => $class_path,
-        license            => $params->{license},
+        license            => $params->{license} || q(perl),
         meta_merge         => __get_resources( $params, $distname ),
         module_name        => $module,
         no_index           => __get_no_index( $params ),
@@ -52,6 +53,26 @@ sub new {
 sub __cpan_testing { !! ($ENV{AUTOMATED_TESTING} || $ENV{PERL_CR_SMOKER_CURRENT}
                      || ($ENV{PERL5OPT} || q()) =~ m{ CPAN-Reporter }mx) }
 
+sub __get_build_class {
+   # Which subclass of M::B should we create?
+   my $params = shift;
+
+   exists $params->{build_class} and return $params->{build_class};
+
+   return Module::Build->subclass( code => q{
+      use Pod::Select;
+
+      sub ACTION_distmeta {
+         my $self = shift;
+
+         $self->notes->{create_readme_pod} and podselect( {
+            -output => q(README.pod) }, $self->dist_version_from );
+
+         return $self->SUPER::ACTION_distmeta;
+      }
+   }, );
+}
+
 sub __get_no_index {
    my $params = shift;
 
@@ -59,10 +80,11 @@ sub __get_no_index {
 }
 
 sub __get_notes {
-   my $params = shift; my $notes = $params->{notes} || {};
+   my $params = shift;
+   my $notes  = exists $params->{notes} ? $params->{notes} : {};
 
-   $notes->{stop_tests} = $params->{stop_tests} && __cpan_testing()
-                        ? 'CPAN Testing stopped' : 0;
+   $notes->{create_readme_pod} = $params->{create_readme_pod} || 0;
+   $notes->{stop_tests       } = __stop_tests( $params );
 
    return $notes;
 }
@@ -95,6 +117,14 @@ sub __get_resources {
       and $resources->{repository} = $repo;
 
    return { resources => $resources };
+}
+
+sub __stop_tests {
+   my $params = shift; __cpan_testing() or return 0;
+
+   $params->{stop_tests} and return 'CPAN Testing stopped';
+
+   return CPANTesting::exceptions;
 }
 
 1;

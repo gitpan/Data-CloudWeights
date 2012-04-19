@@ -2,7 +2,7 @@ Name
     Data::CloudWeights - Calculate values for an HTML tag cloud
 
 Version
-    0.6.$Rev: 130 $
+    0.7.$Rev: 140 $
 
 Synopsis
        use Data::CloudWeights;
@@ -14,7 +14,7 @@ Synopsis
        $cloud->add( $tag, $count, $value );
 
        # Calculate the tag cloud values
-       my $nimbus = $cloud->formation();
+       my $nimbus = $cloud->formation;
 
 Description
     Each tag added to the cloud has a unique name to identify it, a count
@@ -149,7 +149,7 @@ Author
     Peter Flanigan, "<Support at RoxSoft.co.uk>"
 
 License and Copyright
-    Copyright (c) 2008-2010 Peter Flanigan. All rights reserved
+    Copyright (c) 2008-2012 Peter Flanigan. All rights reserved
 
     This program is free software; you can redistribute it and/or modify it
     under the same terms as Perl itself. See perlartistic

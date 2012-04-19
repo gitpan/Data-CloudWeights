@@ -4,7 +4,7 @@
       "Peter Flanigan, C<< <Support at RoxSoft.co.uk> >>"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.110580",
+   "generated_by" : "Module::Build version 0.38, CPAN::Meta::Converter version 2.112621",
    "license" : [
       "perl_5"
    ],
@@ -35,9 +35,9 @@
       "runtime" : {
          "requires" : {
             "Color::Spectrum" : "1.06",
-            "Moose" : "1.21",
+            "Moose" : "2.0402",
             "parent" : "0.221",
-            "perl" : "5.008",
+            "perl" : "5.01",
             "version" : "0.74"
          }
       }
@@ -45,7 +45,7 @@
    "provides" : {
       "Data::CloudWeights" : {
          "file" : "lib/Data/CloudWeights.pm",
-         "version" : "v0.6.130"
+         "version" : "v0.7.140"
       }
    },
    "release_status" : "stable",
@@ -58,5 +58,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.6.130"
+   "version" : "0.7.140"
 }

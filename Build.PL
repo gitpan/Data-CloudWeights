@@ -1,23 +1,21 @@
-# @(#)$Id: Build.PL 128 2011-03-24 20:24:40Z pjf $
+# @(#)$Id: Build.PL 140 2012-04-19 22:23:02Z pjf $
 
 use strict;
 use warnings;
 use inc::Bob; # Module::Build subclass
-use version; our $VERSION = qv( sprintf '0.6.%d', q$Rev: 128 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.7.%d', q$Rev: 140 $ =~ /\d+/gmx );
 
 Bob->new( {
-   stop_tests => 1,
-   license    => q(perl),
    module     => q(Data::CloudWeights),
    home_page  => q(http://www.roxsoft.co.uk),
    requires   => {
-      'perl'            => 5.008,
+      'perl'            => 5.010,
       'parent'          => 0.221,
       'version'         => 0.74,
       'Color::Spectrum' => 1.06,
-      'Moose'           => 1.21, },
-   configure_requires   => { 'Module::Build' => 0.32,
-                             'version'       => 0.74, },
+      'Moose'           => 2.0402, },
+   configure_requires   => { 'version'       => 0.74,
+                             'Module::Build' => 0.32, },
    build_requires       => { 'Test::More'    => 0.74, },
 } )->create_build_script; # Goal!
 
