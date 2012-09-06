@@ -2,7 +2,7 @@ Name
     Data::CloudWeights - Calculate values for an HTML tag cloud
 
 Version
-    0.7.$Rev: 143 $
+    0.7.$Rev: 144 $
 
 Synopsis
        use Data::CloudWeights;
@@ -69,10 +69,10 @@ Configuration and Environment
        keys are values listed above
 
     *sort_order*
-       Either *asc* for ascending or *desc* for descending sort order
+       Either "asc" for ascending or "desc" for descending sort order
 
     *sort_type*
-       Either *alpha* to use the "cmp" operator or *numeric* to use the
+       Either "alpha" to use the "cmp" operator or "numeric" to use the
        "<=>" operator in sorting comparisons
 
 Subroutines/Methods
@@ -92,8 +92,8 @@ Subroutines/Methods
 
     Adds the tag name, count, and value triple to the cloud. The formation
     method returns a ref to an array of hash refs. Each hash ref contains
-    one of these triples and the calculated attributes. The value arg is
-    optional. Passing a count of zero will do nothing but returns the
+    one of these triples and the calculated attributes. The value argument
+    is optional. Passing a count of zero will do nothing but returns the
     current cumulative total count for this tag name
 
   formation
@@ -120,7 +120,7 @@ Subroutines/Methods
     The supplied name for this tag
 
    value
-    The supplied value for this tag. This is usually an href but can be any
+    The supplied value for this tag. This is usually an URI but can be any
     scalar. If multiple calls to add the same tag were made this will be an
     array ref containing each of the passed values
 

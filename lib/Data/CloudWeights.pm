@@ -1,10 +1,10 @@
-# @(#)$Id: CloudWeights.pm 143 2012-04-25 07:42:31Z pjf $
+# @(#)$Id: CloudWeights.pm 144 2012-09-06 00:39:33Z pjf $
 
 package Data::CloudWeights;
 
 use strict;
 use namespace::autoclean;
-use version; our $VERSION = qv( sprintf '0.7.%d', q$Rev: 143 $ =~ /\d+/gmx );
+use version; our $VERSION = qv( sprintf '0.7.%d', q$Rev: 144 $ =~ /\d+/gmx );
 
 use Moose;
 use Moose::Util::TypeConstraints;
@@ -218,7 +218,7 @@ Data::CloudWeights - Calculate values for an HTML tag cloud
 
 =head1 Version
 
-0.7.$Rev: 143 $
+0.7.$Rev: 144 $
 
 =head1 Synopsis
 
@@ -299,11 +299,11 @@ whose keys are values listed above
 
 =item I<sort_order>
 
-Either I<asc> for ascending or I<desc> for descending sort order
+Either C<asc> for ascending or C<desc> for descending sort order
 
 =item I<sort_type>
 
-Either I<alpha> to use the C<cmp> operator or I<numeric> to use the
+Either C<alpha> to use the C<cmp> operator or C<numeric> to use the
 C<< <=> >> operator in sorting comparisons
 
 =back
@@ -330,7 +330,7 @@ calculating it using L<Color::Spectrum>
 
 Adds the tag name, count, and value triple to the cloud. The formation
 method returns a ref to an array of hash refs. Each hash ref contains
-one of these triples and the calculated attributes. The value arg is
+one of these triples and the calculated attributes. The value argument is
 optional. Passing a count of zero will do nothing but returns the
 current cumulative total count for this tag name
 
@@ -365,7 +365,7 @@ The supplied name for this tag
 
 =head3 value
 
-The supplied value for this tag. This is usually an href but can be
+The supplied value for this tag. This is usually an URI but can be
 any scalar. If multiple calls to add the same tag were made this will
 be an array ref containing each of the passed values
 
@@ -428,3 +428,4 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE
 # mode: perl
 # tab-width: 3
 # End:
+
