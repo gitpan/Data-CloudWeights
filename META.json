@@ -42,7 +42,6 @@
             "Color::Spectrum" : "1.06",
             "Moo" : "1.002",
             "Type::Tiny" : "0.012",
-            "Unexpected" : "v0.4.0",
             "namespace::sweep" : "0.006",
             "perl" : "5.01"
          }
@@ -51,7 +50,7 @@
    "provides" : {
       "Data::CloudWeights" : {
          "file" : "lib/Data/CloudWeights.pm",
-         "version" : "v0.9.1"
+         "version" : "v0.9.2"
       }
    },
    "release_status" : "stable",
@@ -64,5 +63,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "v0.9.1"
+   "version" : "v0.9.2"
 }
