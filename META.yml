@@ -24,11 +24,10 @@ no_index:
 provides:
   Data::CloudWeights:
     file: lib/Data/CloudWeights.pm
-    version: v0.9.2
+    version: v0.9.3
 recommends:
   App::cpanminus: 1.6005
 requires:
-  Color::Spectrum: 1.06
   Moo: 1.002
   Type::Tiny: 0.012
   namespace::sweep: 0.006
@@ -37,4 +36,4 @@ resources:
   bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-CloudWeights
   homepage: http://www.roxsoft.co.uk
   license: http://dev.perl.org/licenses/
-version: v0.9.2
+version: v0.9.3
