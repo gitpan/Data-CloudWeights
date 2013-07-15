@@ -2,7 +2,7 @@ Name
     Data::CloudWeights - Calculate values for an HTML tag cloud
 
 Version
-    Describes version v0.9.$Rev: 3 $ of Data::CloudWeights
+    Describes version v0.9.$Rev: 5 $ of Data::CloudWeights
 
 Synopsis
        use Data::CloudWeights;
@@ -134,11 +134,13 @@ Acknowledgements
     HTML::TagCloud::Sortable
        I lifted the sorting code from here
 
-Dependencies
     Color::Spectrum
+       I copied the colour value manipulation code from here after this
+       distribution started failing tests on 5.18
+
+Dependencies
     Moo
     Type::Tiny
-    Unexpected
 
 Incompatibilities
     There are no known incompatibilities in this module

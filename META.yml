@@ -24,7 +24,7 @@ no_index:
 provides:
   Data::CloudWeights:
     file: lib/Data/CloudWeights.pm
-    version: v0.9.3
+    version: v0.9.5
 recommends:
   App::cpanminus: 1.6005
 requires:
@@ -36,4 +36,4 @@ resources:
   bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-CloudWeights
   homepage: http://www.roxsoft.co.uk
   license: http://dev.perl.org/licenses/
-version: v0.9.3
+version: v0.9.5
