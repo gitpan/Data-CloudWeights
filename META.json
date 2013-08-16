@@ -1,10 +1,10 @@
 {
    "abstract" : "Calculate values for an HTML tag cloud",
    "author" : [
-      "Peter Flanigan, C<< <pjfl@cpan.org> >>"
+      "Peter Flanigan <pjfl@cpan.org>"
    ],
-   "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4004, CPAN::Meta::Converter version 2.120921",
+   "dynamic_config" : "1",
+   "generated_by" : "Dist::Zilla version 4.300033, CPAN::Meta::Converter version 2.120921",
    "license" : [
       "perl_5"
    ],
@@ -35,11 +35,8 @@
          }
       },
       "runtime" : {
-         "recommends" : {
-            "App::cpanminus" : "1.6005"
-         },
          "requires" : {
-            "Moo" : "1.002",
+            "Moo" : "1.002000",
             "Type::Tiny" : "0.012",
             "namespace::sweep" : "0.006",
             "perl" : "5.01"
@@ -49,18 +46,20 @@
    "provides" : {
       "Data::CloudWeights" : {
          "file" : "lib/Data/CloudWeights.pm",
-         "version" : "v0.9.5"
+         "version" : "v0.10.1"
       }
    },
    "release_status" : "stable",
    "resources" : {
       "bugtracker" : {
+         "mailto" : "bug-Data-CloudWeights@rt.cpan.org",
          "web" : "http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-CloudWeights"
       },
-      "homepage" : "http://www.roxsoft.co.uk",
+      "homepage" : "https://metacpan.org/author/PJFL",
       "license" : [
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "v0.9.5"
+   "version" : "0.10.1"
 }
+
