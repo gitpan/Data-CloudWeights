@@ -24,7 +24,7 @@ no_index:
 provides:
   Data::CloudWeights:
     file: lib/Data/CloudWeights.pm
-    version: v0.10.1
+    version: v0.11.1
 requires:
   Moo: 1.002000
   Type::Tiny: 0.012
@@ -34,4 +34,4 @@ resources:
   bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-CloudWeights
   homepage: https://metacpan.org/author/PJFL
   license: http://dev.perl.org/licenses/
-version: 0.10.1
+version: 0.11.1
