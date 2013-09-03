@@ -4,6 +4,7 @@ author:
   - 'Peter Flanigan <pjfl@cpan.org>'
 build_requires:
   Module::Build: 0.4004
+  Test::Requires: 0.06
   version: 0.88
 configure_requires:
   Module::Build: 0.4004
@@ -24,9 +25,9 @@ no_index:
 provides:
   Data::CloudWeights:
     file: lib/Data/CloudWeights.pm
-    version: v0.11.1
+    version: v0.12.1
 requires:
-  Moo: 1.002000
+  Moo: 1.003000
   Type::Tiny: 0.012
   namespace::sweep: 0.006
   perl: 5.01
@@ -34,4 +35,4 @@ resources:
   bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Data-CloudWeights
   homepage: https://metacpan.org/author/PJFL
   license: http://dev.perl.org/licenses/
-version: 0.11.1
+version: 0.12.1

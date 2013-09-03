@@ -25,6 +25,7 @@
       "build" : {
          "requires" : {
             "Module::Build" : "0.4004",
+            "Test::Requires" : "0.06",
             "version" : "0.88"
          }
       },
@@ -36,7 +37,7 @@
       },
       "runtime" : {
          "requires" : {
-            "Moo" : "1.002000",
+            "Moo" : "1.003000",
             "Type::Tiny" : "0.012",
             "namespace::sweep" : "0.006",
             "perl" : "5.01"
@@ -46,7 +47,7 @@
    "provides" : {
       "Data::CloudWeights" : {
          "file" : "lib/Data/CloudWeights.pm",
-         "version" : "v0.11.1"
+         "version" : "v0.12.1"
       }
    },
    "release_status" : "stable",
@@ -60,6 +61,6 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.11.1"
+   "version" : "0.12.1"
 }
 

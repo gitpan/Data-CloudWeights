@@ -1,9 +1,9 @@
-# @(#)$Ident: DZ_Build.PL 2013-08-15 13:04 pjf ;
+# @(#)$Ident: DZ_Build.PL 2013-09-03 12:35 pjf ;
 
 use strict;
 use warnings;
 
-use Module::Build;
+use Module::Build 0.4004;
 
 sub whimper { print {*STDOUT} $_[ 0 ]."\n"; exit 0 }
 
@@ -18,6 +18,7 @@ Module::Build->subclass( code => do { local $/; <DATA> } )->new(
   'notes'       => { min_perl_version => $perl_ver },
   'build_requires' => {
     'Module::Build' => '0.4004',
+    'Test::Requires' => '0.06',
     'version' => '0.88'
   },
   'configure_requires' => {
@@ -25,7 +26,7 @@ Module::Build->subclass( code => do { local $/; <DATA> } )->new(
     'version' => '0.88'
   },
   'requires' => {
-    'Moo' => '1.002000',
+    'Moo' => '1.003000',
     'Type::Tiny' => '0.012',
     'namespace::sweep' => '0.006',
     'perl' => '5.01'
